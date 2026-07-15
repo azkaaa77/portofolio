@@ -26,7 +26,7 @@ export const PROJECTS = [
     borderColor: "rgba(37,99,235,0.25)",
     gradient:
       "linear-gradient(160deg, rgba(37,99,235,0.10) 0%, transparent 70%)",
-    imgSrc: null,
+    imgSrc: "/image/sando.png",
   },
   {
     id: "equil",
@@ -155,13 +155,16 @@ function ProjectCard({ project, index, lang }) {
   const words = text.split(/\s+/);
   const isLong = words.length > 25;
 
-  const displayedText = isLong && !isExpanded
-    ? words.slice(0, 22).join(" ") + "..."
-    : text;
+  const displayedText =
+    isLong && !isExpanded ? words.slice(0, 22).join(" ") + "..." : text;
 
   const toggleText = isExpanded
-    ? (lang === "id" ? "Sembunyikan" : "Show Less")
-    : (lang === "id" ? "Lihat Selengkapnya" : "Show More");
+    ? lang === "id"
+      ? "Sembunyikan"
+      : "Show Less"
+    : lang === "id"
+      ? "Lihat Selengkapnya"
+      : "Show More";
 
   return (
     <motion.article
@@ -174,7 +177,8 @@ function ProjectCard({ project, index, lang }) {
         y: -8,
         scale: 1.02,
         borderColor: "rgba(96,165,250,0.35)",
-        boxShadow: "0 30px 60px rgba(37,99,235,0.12), inset 0 1px 1px rgba(255,255,255,0.08)",
+        boxShadow:
+          "0 30px 60px rgba(37,99,235,0.12), inset 0 1px 1px rgba(255,255,255,0.08)",
         transition: { type: "tween", duration: 0.22, ease: "easeOut" },
       }}
       className="relative rounded-2xl overflow-hidden flex flex-col glass-card"
@@ -185,7 +189,10 @@ function ProjectCard({ project, index, lang }) {
       }}
     >
       <div className="p-4 pb-2">
-        <BrowserMockup accentColor={project.accentColor} imgSrc={project.imgSrc} />
+        <BrowserMockup
+          accentColor={project.accentColor}
+          imgSrc={project.imgSrc}
+        />
       </div>
 
       <div className="flex flex-wrap gap-1.5 px-4 pb-3">
@@ -271,7 +278,10 @@ function ProjectCard({ project, index, lang }) {
       >
         <div className="flex items-center gap-1.5 min-w-0">
           <MetricIcon id={project.id} color={project.accentColor} />
-          <span style={{ ...B, fontSize: 11, fontWeight: 600, color: "#e4e4e7" }} className="truncate">
+          <span
+            style={{ ...B, fontSize: 11, fontWeight: 600, color: "#e4e4e7" }}
+            className="truncate"
+          >
             {project.role}
           </span>
         </div>
@@ -301,7 +311,7 @@ export function ProjectsSection({ lang = "id" }) {
       ...p,
       desc: t.projectDescs[p.id],
       role: t.projectRoles[p.id],
-      deliverables: t.projectDeliverables[p.id]
+      deliverables: t.projectDeliverables[p.id],
     };
   });
 
@@ -396,7 +406,12 @@ export function ProjectsSection({ lang = "id" }) {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 md:gap-6">
           {filteredProjects.map((project, i) => (
-            <ProjectCard key={project.id} project={project} index={i} lang={lang} />
+            <ProjectCard
+              key={project.id}
+              project={project}
+              index={i}
+              lang={lang}
+            />
           ))}
         </div>
       </motion.div>
