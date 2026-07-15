@@ -28,6 +28,7 @@ export const EDUCATION = [
     borderColor: "rgba(255,255,255,0.09)",
     gradient:
       "linear-gradient(135deg, rgba(255,255,255,0.045) 0%, rgba(255,255,255,0.015) 100%)",
+    projectIds: ["sando"],
   },
   {
     id: "smkn7",
@@ -46,6 +47,7 @@ export const EDUCATION = [
     borderColor: "rgba(255,255,255,0.09)",
     gradient:
       "linear-gradient(135deg, rgba(255,255,255,0.045) 0%, rgba(255,255,255,0.015) 100%)",
+    projectIds: ["hotel", "internship"],
   },
 ];
 
@@ -107,9 +109,12 @@ const styles = `
   }
 
   .edu-section {
-    width: 100%; min-height: 100vh;
+    width: 100%; height: 100%;
     display: flex; align-items: center; justify-content: center;
-    position: relative; overflow: hidden; padding: 4rem 1.5rem;
+    position: relative; padding: 4rem 1.5rem;
+  }
+  @media (max-width: 767px) {
+    .edu-section { padding: 2.5rem 1rem; }
   }
   .edu-grid {
     position: absolute; inset: 0; pointer-events: none;
@@ -147,9 +152,25 @@ const styles = `
     opacity: 0; transform: translateX(-40px) scale(0.96);
     backdrop-filter: blur(28px) saturate(160%);
     -webkit-backdrop-filter: blur(28px) saturate(160%);
+    will-change: transform, opacity;
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
   }
   @media (min-width: 768px) {
     .edu-card { padding: 32px; }
+  }
+  @media (max-width: 767px) {
+    .edu-card {
+      backdrop-filter: blur(8px) saturate(140%);
+      -webkit-backdrop-filter: blur(8px) saturate(140%);
+      background-color: rgba(14, 14, 18, 0.82) !important;
+    }
+    .edu-grid { animation: none !important; }
+    .edu-orb { filter: blur(40px) !important; opacity: 0.4 !important; }
+    .edu-card-glow { animation: none !important; opacity: 0.3 !important; }
+    .edu-divider::after { animation: none !important; }
+    .edu-particles { display: none !important; }
+    .edu-corner::before, .edu-corner::after { animation: none !important; }
   }
   .edu-card.edu-card--visible {
     animation: edu-slideInCard 0.8s cubic-bezier(0.16,1,0.3,1) forwards;
@@ -309,9 +330,10 @@ function Particles() {
 }
 
 // ─── Individual card ───────────────────────────────────────────────────────────
-function EduCard({ edu, index }) {
+function EduCard({ edu, index, lang }) {
   const ref = useRef(null);
   const visible = useInView(ref);
+  const [expanded, setExpanded] = useState(false);
 
   return (
     <div
@@ -436,6 +458,7 @@ function EduCard({ edu, index }) {
           flexWrap: "wrap",
           position: "relative",
           zIndex: 2,
+          marginBottom: edu.projects && edu.projects.length > 0 ? 20 : 0,
         }}
       >
         {edu.chips.map((chip) => (
@@ -453,6 +476,91 @@ function EduCard({ edu, index }) {
           </span>
         ))}
       </div>
+
+      {/* ── Related Projects / Experience Accordion ── */}
+      {edu.projects && edu.projects.length > 0 && (
+        <div style={{ marginTop: 20, position: "relative", zIndex: 10, marginBottom: 10 }}>
+          <button
+            onClick={() => setExpanded(!expanded)}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              fontFamily: M.fontFamily,
+              fontSize: 10,
+              color: edu.accentColor,
+              textTransform: "uppercase",
+              letterSpacing: "0.15em",
+              cursor: "pointer",
+              background: "none",
+              border: "none",
+              padding: 0,
+            }}
+            className="hover:brightness-125 transition-all"
+          >
+            <span style={{ fontSize: 12 }}>{expanded ? "▼" : "▶"}</span>
+            <span>
+              {lang === "id" ? "Proyek & Magang Terkait" : "Related Projects & Internships"} ({edu.projects.length})
+            </span>
+          </button>
+
+          {expanded && (
+            <div
+              style={{
+                marginTop: 14,
+                display: "flex",
+                flexDirection: "column",
+                gap: 14,
+                maxHeight: "35vh",
+                overflowY: "auto",
+                paddingRight: 6,
+              }}
+              className="custom-scrollbar"
+            >
+              {edu.projects.map((proj) => (
+                <div
+                  key={proj.id}
+                  style={{
+                    background: "rgba(255, 255, 255, 0.015)",
+                    border: "1px solid rgba(255, 255, 255, 0.04)",
+                    borderRadius: 12,
+                    padding: 14,
+                  }}
+                >
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, flexWrap: "wrap", marginBottom: 6 }}>
+                    <div>
+                      <h4 style={{ ...H, fontSize: 13, fontWeight: 700, color: "#fafafa" }}>
+                        {proj.title}
+                      </h4>
+                      <div style={{ ...B, fontSize: 11, color: "#71717a", marginTop: 2 }}>
+                        {proj.role} {proj.company && `· ${proj.company}`} {proj.cityCountry && `(${proj.cityCountry})`}
+                      </div>
+                    </div>
+                    <span style={{ ...M, fontSize: 9, color: edu.accentColor, background: `${edu.accentColor}18`, padding: "2px 8px", borderRadius: 4, whiteSpace: "nowrap" }}>
+                      {proj.period}
+                    </span>
+                  </div>
+
+                  <p style={{ ...B, fontSize: 11.5, color: "#a1a1aa", lineHeight: 1.6, marginBottom: 10 }}>
+                    {proj.desc}
+                  </p>
+
+                  <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                    {proj.contributions.map((contr, cIdx) => (
+                      <div key={cIdx} style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
+                        <span style={{ color: edu.accentColor, fontSize: 11, marginTop: 2 }}>•</span>
+                        <span style={{ ...B, fontSize: 11, color: "#71717a", lineHeight: 1.4 }}>
+                          {contr}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* ── Progress bar ── */}
       <div className="edu-progress-wrap" aria-hidden="true">
@@ -578,6 +686,16 @@ export function EducationSection({ lang = "id" }) {
     degree: t.degrees[edu.id],
     badge: t.badges[edu.id],
     details: t.details[edu.id],
+    projects: edu.projectIds ? edu.projectIds.map((pId) => ({
+      id: pId,
+      title: t.projects[pId].title,
+      role: t.projects[pId].role,
+      company: t.projects[pId].company || null,
+      cityCountry: t.projects[pId].cityCountry || null,
+      period: t.projects[pId].period,
+      desc: t.projects[pId].desc,
+      contributions: t.projects[pId].contributions,
+    })) : []
   }));
 
   return (
@@ -593,9 +711,13 @@ export function EducationSection({ lang = "id" }) {
             "linear-gradient(160deg, #080910 0%, #0a0d1c 55%, #07090f 100%)",
         }}
       >
-        <div className="edu-grid" aria-hidden="true" />
-        {/* <div className="edu-scanline" aria-hidden="true" /> */}
-        <Orbs />
+        {/* Decorative elements — isolated overflow container.
+            Clips grid/orb bleed without touching the section's own overflow. */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="edu-grid" aria-hidden="true" />
+          {/* <div className="edu-scanline" aria-hidden="true" /> */}
+          <Orbs />
+        </div>
 
         <div
           style={{
@@ -610,7 +732,7 @@ export function EducationSection({ lang = "id" }) {
 
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
             {educationData.map((edu, i) => (
-              <EduCard key={edu.id} edu={edu} index={i} />
+              <EduCard key={edu.id} edu={edu} index={i} lang={lang} />
             ))}
           </div>
         </div>

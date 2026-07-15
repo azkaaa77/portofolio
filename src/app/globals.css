@@ -106,6 +106,60 @@ html.lenis body {
   border: 1px solid rgba(255, 255, 255, 0.07);
 }
 
+/* ── Glassmorphism card — shared responsive class ── */
+.glass-card {
+  backdrop-filter: blur(32px) saturate(180%);
+  -webkit-backdrop-filter: blur(32px) saturate(180%);
+  background-color: rgba(255, 255, 255, 0.03);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.1),
+    0 20px 40px rgba(0, 0, 0, 0.5);
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* ── Mobile performance fallback (< 768px) ── */
+@media (max-width: 767px) {
+  .glass-card {
+    backdrop-filter: blur(8px) saturate(140%);
+    -webkit-backdrop-filter: blur(8px) saturate(140%);
+    background-color: rgba(14, 14, 18, 0.82);
+  }
+
+  .glass-panel {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    background: rgba(24, 24, 27, 0.75);
+  }
+
+  /* GPU-promote sticky layers */
+  .sticky-layer {
+    will-change: transform;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+  }
+
+  /* Reduce orb blur on mobile */
+  .mobile-orb-reduce {
+    filter: blur(40px) !important;
+    opacity: 0.5 !important;
+  }
+
+  /* Kill non-essential animations on mobile for perf */
+  .mobile-anim-kill {
+    animation: none !important;
+  }
+}
+
+/* ── GPU compositing hint for heavy elements ── */
+.gpu-promote {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
 /* ── Blue glow ── */
 .glow-blue {
   box-shadow:

@@ -154,7 +154,7 @@ export const ScrollVelocity = ({
       >
         <motion.div
           className={`${scrollerClassName ?? ""} flex whitespace-nowrap text-center font-sans text-4xl font-bold tracking-[-0.02em] drop-shadow md:text-[5rem] md:leading-[5rem]`}
-          style={{ x, ...scrollerStyle }}
+          style={{ x, willChange: "transform", transform: "translateZ(0)", ...scrollerStyle }}
         >
           {spans}
         </motion.div>

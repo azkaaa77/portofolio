@@ -17,60 +17,76 @@ const BLUE_SKY = "#60a5fa";
 
 export const PROJECTS = [
   {
-    id: "kard-id",
-    title: "KARD.ID",
-    subtitle: "Web Agency Platform",
+    id: "backburner",
+    title: "Kedai Backburner",
+    subtitle: "Advanced Culinary POS System",
     category: "Web App",
-    desc: "Full-featured agency website with service showcases, project portfolio management, and an integrated contact pipeline.",
-    tags: ["React", "Laravel", "MySQL", "TailwindCSS"],
-    metric: "📈 Efisiensi operasional +120%",
-    metricSub: "3 active projects",
+    tags: ["Laravel", "Tailwind CSS", "Filament", "Database"],
     accentColor: BLUE_NAVY,
     borderColor: "rgba(37,99,235,0.25)",
     gradient:
       "linear-gradient(160deg, rgba(37,99,235,0.10) 0%, transparent 70%)",
-  },
-  {
-    id: "elwinhaner",
-    title: "ELWINHANER",
-    subtitle: "Digital Brand Solutions",
-    category: "Website",
-    desc: "Premium digital branding platform delivering identity systems, web presence, and creative direction for modern businesses.",
-    tags: ["Next.js", "Framer Motion", "Vercel"],
-    metric: "🚀 Brand launch rate 100%",
-    metricSub: "2 brands live",
-    accentColor: BLUE_SKY,
-    borderColor: "rgba(96,165,250,0.22)",
-    gradient:
-      "linear-gradient(160deg, rgba(96,165,250,0.08) 0%, transparent 70%)",
-  },
-  {
-    id: "blue-team",
-    title: "CTF Blue Team",
-    subtitle: "Security Dashboard",
-    category: "Web App",
-    desc: "Real-time security event monitoring for CTF Blue Team ops. Visualizes log streams, flags anomalies, and tracks threat indicators.",
-    tags: ["PHP", "Laravel", "MySQL", "Security"],
-    metric: "🛡️ Threat detection +87%",
-    metricSub: "Real-time log stream",
-    accentColor: BLUE_NAVY,
-    borderColor: "rgba(37,99,235,0.25)",
-    gradient:
-      "linear-gradient(160deg, rgba(37,99,235,0.10) 0%, transparent 70%)",
+    imgSrc: null,
   },
   {
     id: "equil",
-    title: "EQUIL.",
-    subtitle: "AI-Powered Focus App",
+    title: "EQUIL",
+    subtitle: "Minimalist Personal Productivity Dashboard",
     category: "Web App",
-    desc: "Next.js productivity app with AI assistance, focus session tracking, and ambient workspace tooling for deep work.",
-    tags: ["Next.js", "TailwindCSS", "AI", "OpenAI"],
-    metric: "⚡ Focus efisiensi +40%",
-    metricSub: "AI deep work",
+    tags: ["Next.js", "Supabase", "TypeScript", "Vibe Coding"],
     accentColor: BLUE_SKY,
     borderColor: "rgba(96,165,250,0.22)",
     gradient:
       "linear-gradient(160deg, rgba(96,165,250,0.08) 0%, transparent 70%)",
+    imgSrc: "/image/equil.png",
+  },
+  {
+    id: "basket-mnc",
+    title: "UKM Basket MNC",
+    subtitle: "MNC Basketball Community Website - UI Slicing",
+    category: "Website",
+    tags: ["WordPress", "Tailwind CSS", "JavaScript", "UI Slicing"],
+    accentColor: BLUE_NAVY,
+    borderColor: "rgba(37,99,235,0.25)",
+    gradient:
+      "linear-gradient(160deg, rgba(37,99,235,0.10) 0%, transparent 70%)",
+    imgSrc: "/image/slicing.png",
+  },
+  {
+    id: "kard",
+    title: "Kard",
+    subtitle: "KARD.ID - Cybersecurity Ops Inspired Portfolio Hub",
+    category: "Landing Page",
+    tags: ["WordPress", "Tailwind CSS", "JavaScript", "Frontend"],
+    accentColor: BLUE_SKY,
+    borderColor: "rgba(96,165,250,0.22)",
+    gradient:
+      "linear-gradient(160deg, rgba(96,165,250,0.08) 0%, transparent 70%)",
+    imgSrc: "/image/kard.png",
+  },
+  {
+    id: "about-bandung",
+    title: "About Bandung",
+    subtitle: "Premium Cultural & City Guide Portal",
+    category: "Website",
+    tags: ["HTML", "CSS", "Responsive", "Frontend"],
+    accentColor: BLUE_NAVY,
+    borderColor: "rgba(37,99,235,0.25)",
+    gradient:
+      "linear-gradient(160deg, rgba(37,99,235,0.10) 0%, transparent 70%)",
+    imgSrc: "/image/bandung.png",
+  },
+  {
+    id: "azzzk-space",
+    title: "AzzzK SPACE",
+    subtitle: "Futuristic Interactive Astronomy Hub",
+    category: "Website",
+    tags: ["HTML", "CSS", "Creative Frontend", "UI Design"],
+    accentColor: BLUE_SKY,
+    borderColor: "rgba(96,165,250,0.22)",
+    gradient:
+      "linear-gradient(160deg, rgba(96,165,250,0.08) 0%, transparent 70%)",
+    imgSrc: "/image/galaxy.png",
   },
 ];
 
@@ -131,7 +147,22 @@ function MetricIcon({ id, color }) {
   }
 }
 
-function ProjectCard({ project, index }) {
+function ProjectCard({ project, index, lang }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const text = project.desc || "";
+
+  // Split by whitespace to estimate words
+  const words = text.split(/\s+/);
+  const isLong = words.length > 25;
+
+  const displayedText = isLong && !isExpanded
+    ? words.slice(0, 22).join(" ") + "..."
+    : text;
+
+  const toggleText = isExpanded
+    ? (lang === "id" ? "Sembunyikan" : "Show Less")
+    : (lang === "id" ? "Lihat Selengkapnya" : "Show More");
+
   return (
     <motion.article
       key={project.id}
@@ -146,16 +177,15 @@ function ProjectCard({ project, index }) {
         boxShadow: "0 30px 60px rgba(37,99,235,0.12), inset 0 1px 1px rgba(255,255,255,0.08)",
         transition: { type: "tween", duration: 0.22, ease: "easeOut" },
       }}
-      className="relative rounded-2xl overflow-hidden flex flex-col"
+      className="relative rounded-2xl overflow-hidden flex flex-col glass-card"
       style={{
-        ...GLASS,
         border: "1px solid rgba(255,255,255,0.08)",
         backgroundImage: `${project.gradient}, linear-gradient(rgba(9,9,11,0.45), rgba(9,9,11,0.45))`,
         transition: "box-shadow 0.22s ease, border-color 0.22s ease",
       }}
     >
       <div className="p-4 pb-2">
-        <BrowserMockup accentColor={project.accentColor} />
+        <BrowserMockup accentColor={project.accentColor} imgSrc={project.imgSrc} />
       </div>
 
       <div className="flex flex-wrap gap-1.5 px-4 pb-3">
@@ -170,7 +200,6 @@ function ProjectCard({ project, index }) {
               border: `1px solid ${project.accentColor}30`,
               color: project.accentColor + "cc",
               background: project.accentColor + "0d",
-              backdropFilter: "blur(6px)",
             }}
           >
             {tag}
@@ -179,18 +208,6 @@ function ProjectCard({ project, index }) {
       </div>
 
       <div className="flex flex-col flex-1 px-5 pb-5">
-        <span
-          style={{
-            ...M,
-            fontSize: 9,
-            color: "#71717a",
-            letterSpacing: "0.25em",
-            textTransform: "uppercase",
-            marginBottom: 6,
-          }}
-        >
-          {project.subtitle}
-        </span>
         <h3
           style={{
             ...H,
@@ -198,16 +215,49 @@ function ProjectCard({ project, index }) {
             fontWeight: 800,
             color: "#fafafa",
             letterSpacing: "-0.03em",
-            marginBottom: 8,
+            marginBottom: 4,
           }}
         >
           {project.title}
         </h3>
+        <span
+          style={{
+            ...M,
+            fontSize: 9,
+            color: "#71717a",
+            letterSpacing: "0.15em",
+            textTransform: "uppercase",
+            marginBottom: 10,
+            display: "block",
+          }}
+        >
+          {project.subtitle}
+        </span>
         <p
           style={{ ...B }}
           className="text-[13px] md:text-[14px] leading-relaxed"
         >
-          <span style={{ color: "#a1a1aa" }}>{project.desc}</span>
+          <span style={{ color: "#a1a1aa" }}>{displayedText}</span>
+          {isLong && (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                setIsExpanded(!isExpanded);
+              }}
+              style={{
+                color: project.accentColor,
+                marginLeft: 6,
+                fontWeight: 600,
+                fontSize: "12px",
+                cursor: "pointer",
+                display: "inline-block",
+                borderBottom: "1px dashed transparent",
+              }}
+              className="hover:border-current hover:brightness-125 transition-all"
+            >
+              {toggleText}
+            </button>
+          )}
         </p>
       </div>
 
@@ -216,16 +266,17 @@ function ProjectCard({ project, index }) {
         style={{
           borderTop: "1px solid rgba(255,255,255,0.08)",
           background: `linear-gradient(90deg, ${project.accentColor}12 0%, transparent 100%)`,
+          marginTop: "auto",
         }}
       >
         <div className="flex items-center gap-1.5 min-w-0">
           <MetricIcon id={project.id} color={project.accentColor} />
           <span style={{ ...B, fontSize: 11, fontWeight: 600, color: "#e4e4e7" }} className="truncate">
-            {project.metric}
+            {project.role}
           </span>
         </div>
         <span style={{ ...M, fontSize: 9, color: "#71717a", flexShrink: 0 }}>
-          {project.metricSub}
+          {project.category}
         </span>
       </div>
     </motion.article>
@@ -246,16 +297,11 @@ export function ProjectsSection({ lang = "id" }) {
   const scale = useTransform(scrollYProgress, [0, 1], [1, 0.96]);
 
   const projectsData = PROJECTS.map((p) => {
-    let key = "kard";
-    if (p.id === "elwinhaner") key = "elwin";
-    else if (p.id === "blue-team") key = "blueteam";
-    else if (p.id === "equil") key = "equil";
-
     return {
       ...p,
-      desc: t.projectDescs[key],
-      metric: t.projectMetrics[key],
-      metricSub: t.projectMetrics[key + "Sub"],
+      desc: t.projectDescs[p.id],
+      role: t.projectRoles[p.id],
+      deliverables: t.projectDeliverables[p.id]
     };
   });
 
@@ -349,8 +395,8 @@ export function ProjectsSection({ lang = "id" }) {
         </motion.div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 md:gap-6">
-          {filteredProjects.slice(0, 3).map((project, i) => (
-            <ProjectCard key={project.id} project={project} index={i} />
+          {filteredProjects.map((project, i) => (
+            <ProjectCard key={project.id} project={project} index={i} lang={lang} />
           ))}
         </div>
       </motion.div>

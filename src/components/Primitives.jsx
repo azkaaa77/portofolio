@@ -35,7 +35,7 @@ export function SectionLabel({ children }) {
   );
 }
 
-export function BrowserMockup({ accentColor = "#2563eb" }) {
+export function BrowserMockup({ accentColor = "#2563eb", imgSrc }) {
   return (
     <div
       style={{
@@ -121,41 +121,55 @@ export function BrowserMockup({ accentColor = "#2563eb" }) {
           overflow: "hidden",
         }}
       >
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            opacity: 0.04,
-            backgroundImage: `linear-gradient(${accentColor} 1px, transparent 1px), linear-gradient(90deg, ${accentColor} 1px, transparent 1px)`,
-            backgroundSize: "20px 20px",
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            bottom: -20,
-            right: -20,
-            width: 100,
-            height: 100,
-            borderRadius: "50%",
-            background: accentColor,
-            filter: "blur(32px)",
-            opacity: 0.2,
-          }}
-        />
-        <span
-          style={{
-            ...M,
-            fontSize: 9,
-            color: "#3f3f46",
-            letterSpacing: "0.3em",
-            textTransform: "uppercase",
-            position: "relative",
-            zIndex: 1,
-          }}
-        >
-          Preview
-        </span>
+        {imgSrc ? (
+          <img
+            src={imgSrc}
+            alt="Preview"
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+            }}
+          />
+        ) : (
+          <>
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                opacity: 0.04,
+                backgroundImage: `linear-gradient(${accentColor} 1px, transparent 1px), linear-gradient(90deg, ${accentColor} 1px, transparent 1px)`,
+                backgroundSize: "20px 20px",
+              }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                bottom: -20,
+                right: -20,
+                width: 100,
+                height: 100,
+                borderRadius: "50%",
+                background: accentColor,
+                filter: "blur(32px)",
+                opacity: 0.2,
+              }}
+            />
+            <span
+              style={{
+                ...M,
+                fontSize: 9,
+                color: "#3f3f46",
+                letterSpacing: "0.3em",
+                textTransform: "uppercase",
+                position: "relative",
+                zIndex: 1,
+              }}
+            >
+              Preview
+            </span>
+          </>
+        )}
       </div>
     </div>
   );
